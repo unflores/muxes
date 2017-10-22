@@ -1,0 +1,22 @@
+#!/bin/sh
+
+SITE=$1
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+BASE=$(cat "$SCRIPTPATH/HOME")
+
+tmux new-session -d -s $SITE -c "$BASE$SITE"
+
+# First window already created
+tmux rename-window 'app'
+# Create all other windows
+tmux new-window -t $SITE:2 -d -c "$BASE$SITE" -n 'command-line'
+tmux new-window -t $SITE:3 -d -c "$BASE$SITE" -n 'console'
+tmux new-window -t $SITE:4 -d -c "$BASE$SITE" -n 'server'
+tmux new-window -t $SITE:5 -d -c "$BASE$SITE" -n 'specs'
+
+# Start at 1
+tmux select-window -t $SITE:1
+
+# Attach the session and start tmuxing
+tmux attach-session -t $SITE
+
